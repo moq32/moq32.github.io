@@ -183,7 +183,7 @@ section{padding:100px 48px}
   padding-left:20px;position:relative;font-weight:300;
 }
 .exp-bullets li::before{
-  content:'→';position:absolute;left:0;color:var(--gold);font-weight:600;
+  content:'•';position:absolute;left:0;color:var(--gold);font-weight:600;
 }
 .highlight{
   color:var(--metric);font-weight:700;
@@ -227,7 +227,7 @@ section{padding:100px 48px}
   font-size:.88rem;color:var(--text-mid);line-height:1.7;font-weight:300;
   padding-left:18px;position:relative;
 }
-.project-card li::before{content:'▸';position:absolute;left:0;color:var(--gold)}
+.project-card li::before{content:'•';position:absolute;left:0;color:var(--gold)}
 .project-link{
   display:inline-block;margin-top:20px;font-size:.8rem;font-weight:500;
   color:var(--gold);text-decoration:none;letter-spacing:.04em;
@@ -260,6 +260,7 @@ section{padding:100px 48px}
 }
 
 /* ─── EDUCATION ─── */
+.edu-logo{display:block;height:60px;width:auto;margin-bottom:16px;object-fit:contain}
 .edu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
 .edu-card{
   background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
@@ -326,7 +327,30 @@ footer{
   .skills-grid{grid-template-columns:1fr}
   .nav-links{display:none}
   .exp-card{padding:28px 24px}
+  .cert-grid{grid-template-columns:1fr}
+  .cert-card{flex-direction:column;gap:20px}
 }
+
+/* ─── CERTIFICATIONS ─── */
+.cert-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.cert-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:36px 40px;display:flex;gap:28px;align-items:flex-start;
+  position:relative;overflow:hidden;transition:border-color .3s,transform .3s;
+}
+.cert-card:hover{border-color:rgba(201,168,76,.2);transform:translateY(-2px)}
+.cert-card::after{
+  content:'';position:absolute;top:0;right:0;width:140px;height:140px;
+  background:radial-gradient(circle at top right,rgba(201,168,76,.06),transparent 70%);
+  pointer-events:none;
+}
+.cert-badge-img{flex-shrink:0}
+.cert-badge-img img{width:88px;height:88px;object-fit:contain;border-radius:8px}
+.cert-title{font-size:1.05rem;font-weight:600;margin-bottom:4px}
+.cert-issuer{font-size:.88rem;color:var(--gold);font-weight:500;margin-bottom:4px}
+.cert-date{font-size:.8rem;color:var(--text-dim);margin-bottom:12px}
+.cert-desc{font-size:.88rem;color:var(--text-mid);font-weight:300;line-height:1.75;margin-bottom:16px}
+@media(max-width:900px){.cert-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -339,6 +363,7 @@ footer{
     <a href="#projects">Projects</a>
     <a href="#skills">Skills</a>
     <a href="#education">Education</a>
+    <a href="#certifications">Certifications</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
@@ -347,9 +372,9 @@ footer{
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-text">
-      <div class="label">MS Business Analytics at University of Washington</div>
+      <div class="label">Business Analytics Practicum @ Microsoft · MS Foster School of Business</div>
       <h1>Moqeet <span>Ahmed</span></h1>
-      <p class="tagline">Turning complex data into strategic business decisions. Experienced across Coca-Cola, Nestlé, and British American Tobacco — combining analytical rigor with commercial intuition to drive measurable impact.</p>
+      <p class="tagline">Currently consulting at Microsoft on ecosystem-level CLV modeling across M365, Windows, Bing, and Gaming. Prior commercial experience at Coca-Cola, Nestlé, and British American Tobacco, translating complex data into strategic decisions that move revenue.</p>
       <div class="hero-cta">
         <a href="#contact" class="btn btn-primary">Get in Touch ↗</a>
         <a href="#experience" class="btn btn-ghost">View Work</a>
@@ -391,6 +416,29 @@ footer{
       </div>
     </div>
 
+    <!-- Microsoft -->
+    <div class="exp-card">
+      <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
+        <rect x="1" y="1" width="12" height="12" fill="#F25022"/>
+        <rect x="14" y="1" width="12" height="12" fill="#7FBA00"/>
+        <rect x="1" y="15" width="12" height="12" fill="#00A4EF"/>
+        <rect x="14" y="15" width="12" height="12" fill="#FFB900"/>
+        <text x="30" y="21" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#EDEAE4" text-anchor="start">Microsoft</text>
+      </svg>
+      <div class="exp-header">
+        <div class="exp-company">Microsoft <span>| Fortune 500 Technology Company</span></div>
+        <div class="exp-meta">
+          <span class="loc">Seattle, WA</span>
+          <span class="date">Mar 2026 – Jun 2026</span>
+        </div>
+      </div>
+      <div class="exp-role">Business Analytics Practicum Consultant</div>
+      <ul class="exp-bullets">
+        <li>Architecting an ecosystem-level CLV model spanning <span class="highlight">M365</span>, Windows, Bing, and Gaming to quantify cross-product value interdependencies and surface data-driven signals for bundling and pricing strategy.</li>
+        <li>Running SQL and Python analyses on large-scale, multi-product consumer datasets, translating technical findings into ROI-focused strategic narratives for senior Microsoft stakeholders.</li>
+      </ul>
+    </div>
+
     <!-- Coca-Cola -->
     <div class="exp-card">
       <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
@@ -420,10 +468,10 @@ footer{
         <div class="exp-company">Nestlé <span>| Global FMCG Leader</span></div>
         <div class="exp-meta">
           <span class="loc">Lahore, Pakistan</span>
-          <span class="date">May 2023 – Sep 2023</span>
+          <span class="date">May 2023 – Oct 2023</span>
         </div>
       </div>
-      <div class="exp-role">Marketing Intern</div>
+      <div class="exp-role">Business Development Analyst Intern</div>
       <ul class="exp-bullets">
         <li>Shortlisted <span class="highlight">18</span> high-ROI candidates from <span class="highlight">30+</span> startup prospects by building a composite scoring model. Evaluated each venture on financial stability, customer reach, and valuation across Agri-tech, health & wellness, e-commerce, and sustainable packaging verticals.</li>
         <li>Strengthened strategic partnership decisions by synthesizing unstructured qualitative data alongside quantitative performance metrics into a reproducible evaluation framework, enabling senior leadership to make consistent, data-backed investment recommendations.</li>
@@ -441,13 +489,13 @@ footer{
         <div class="exp-company">British American Tobacco <span>| Multinational FMCG</span></div>
         <div class="exp-meta">
           <span class="loc">Rawalpindi, Pakistan</span>
-          <span class="date">May 2022 – Sep 2022</span>
+          <span class="date">May 2022 – Oct 2022</span>
         </div>
       </div>
-      <div class="exp-role">Trade Marketing Intern</div>
+      <div class="exp-role">Marketing Analyst Intern</div>
       <ul class="exp-bullets">
-        <li>Delivered a <span class="highlight">9%</span> lift in weekly outlet sales by designing an Excel-based outlet scoring model. Incorporated POS condition, dispenser maintenance, and product visibility metrics, then validated impact through an A/B test against the prior volume-only targeting approach.</li>
-        <li>Prevented <span class="highlight">10%</span> monthly volume losses by surveying <span class="highlight">120</span> retail outlets to identify counterfeit overstocking patterns. Implemented data-driven early intervention strategies that safeguarded brand integrity and maintained distribution quality.</li>
+        <li>Delivered a <span class="highlight">9%</span> lift in weekly outlet sales by designing an Excel-based outlet scoring model incorporating POS condition, dispenser maintenance, and product visibility metrics; validated impact via A/B test against the prior volume-only targeting rule.</li>
+        <li>Mitigated <span class="highlight">10%</span> monthly volume losses by conducting a root-cause analysis across <span class="highlight">120</span> retail outlets to uncover counterfeit risk patterns and establish data-driven early intervention thresholds.</li>
       </ul>
     </div>
   </div>
@@ -487,7 +535,7 @@ footer{
           <h3>Adidas US Retail Sales (2020–2021): Regional, Retailer &amp; Product Performance Analysis</h3>
           <p class="p-meta">Data Analysis · Jun 2025 – Sep 2025</p>
           <ul>
-            <li>Uncovered revenue and profitability trends across <span class="highlight">4</span> dimensions — region, channel, retailer, and product type — using <span class="highlight">30+</span> SQL queries on structured datasets.</li>
+            <li>Uncovered revenue and profitability trends across <span class="highlight">4</span> dimensions (region, channel, retailer, and product type) using <span class="highlight">30+</span> SQL queries on structured datasets.</li>
             <li>Surfaced Covid-era recovery patterns and channel-level pricing trade-offs by comparing FY2020 vs. FY2021 performance with Python and pandas.</li>
           </ul>
           <div class="project-links">
@@ -518,7 +566,7 @@ footer{
             <span class="tag">R</span>
             <span class="tag blue">Statistical Analysis</span>
           </div>
-          <h3>Dairy Retail Data Analysis – Product, Pricing, and Visibility</h3>
+          <h3>Dairy Retail Data Analysis: Product, Pricing, and Visibility</h3>
           <p class="p-meta">Data Analysis · Sep 2023 – Jan 2024</p>
           <ul>
             <li>Analyzed the supplier-side retail dairy landscape in urban Lahore to understand pricing drivers and shelf visibility across LMT vs. IMT store formats.</li>
@@ -544,46 +592,38 @@ footer{
     <div class="section-header"><h2>Technical Skills</h2></div>
     <div class="skills-grid">
       <div class="skill-group">
-        <h3>Languages & ML</h3>
+        <h3>Languages & Data</h3>
         <div class="skill-tags">
-          <span class="skill-tag">Python</span>
           <span class="skill-tag">SQL</span>
+          <span class="skill-tag">Python</span>
           <span class="skill-tag">R</span>
           <span class="skill-tag">C++</span>
-          <span class="skill-tag">scikit-learn</span>
-          <span class="skill-tag">XGBoost</span>
-          <span class="skill-tag">TensorFlow</span>
-          <span class="skill-tag">PyTorch</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Data & Analytics</h3>
-        <div class="skill-tags">
           <span class="skill-tag">pandas</span>
           <span class="skill-tag">NumPy</span>
+          <span class="skill-tag">Advanced Excel</span>
           <span class="skill-tag">Tableau</span>
           <span class="skill-tag">Power BI</span>
-          <span class="skill-tag">Advanced Excel</span>
         </div>
       </div>
       <div class="skill-group">
-        <h3>ML Concepts</h3>
+        <h3>ML & Modeling</h3>
         <div class="skill-tags">
-          <span class="skill-tag">Classification</span>
-          <span class="skill-tag">Regularization</span>
+          <span class="skill-tag">scikit-learn</span>
+          <span class="skill-tag">XGBoost</span>
+          <span class="skill-tag">SARIMAX</span>
+          <span class="skill-tag">Supervised Learning</span>
+          <span class="skill-tag">A/B Testing</span>
           <span class="skill-tag">Forecasting</span>
-          <span class="skill-tag">Embeddings</span>
-          <span class="skill-tag">Tokenization</span>
         </div>
       </div>
       <div class="skill-group">
-        <h3>Tools & Practices</h3>
+        <h3>Tools & Platforms</h3>
         <div class="skill-tags">
           <span class="skill-tag">Git</span>
-          <span class="skill-tag">AWS</span>
+          <span class="skill-tag">AWS Cloud</span>
           <span class="skill-tag">Figma</span>
           <span class="skill-tag">LaTeX</span>
-          <span class="skill-tag">SPSS</span>
+          <span class="skill-tag">GenAI Tools</span>
         </div>
       </div>
     </div>
@@ -596,17 +636,55 @@ footer{
     <div class="section-header"><h2>Education</h2></div>
     <div class="edu-grid">
       <div class="edu-card">
+        <img src="uw-logo.png" alt="University of Washington" class="edu-logo" />
         <div class="degree">M.S. in Business Analytics</div>
-        <div class="school">University of Washington — Foster School of Business</div>
+        <div class="school">University of Washington, Foster School of Business</div>
         <div class="edu-meta">📍 Seattle, WA · Jun 2025 – Jun 2026</div>
         <div class="coursework"><strong>Coursework:</strong> Machine Learning, Database Management, Operations Research</div>
       </div>
       <div class="edu-card">
+        <img src="lums-logo.png" alt="Lahore University of Management Sciences" class="edu-logo" />
         <div class="degree">BSc (Hons) Management Sciences</div>
         <div class="school">Lahore University of Management Sciences (LUMS)</div>
         <div class="edu-meta">📍 Lahore, Pakistan · Sep 2020 – Jun 2024</div>
         <div class="coursework"><strong>Minor:</strong> Computer Science</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="container">
+    <div class="section-header"><h2>Certifications</h2></div>
+    <div class="cert-grid">
+
+      <div class="cert-card">
+        <div class="cert-badge-img">
+          <img src="aws-certified-cloud-practitioner.png" alt="AWS Certified Cloud Practitioner Badge" />
+        </div>
+        <div class="cert-info">
+          <div class="cert-title">AWS Certified Cloud Practitioner</div>
+          <div class="cert-issuer">Amazon Web Services</div>
+          <div class="cert-date">Issued Jun 2025</div>
+          <p class="cert-desc">Validates foundational cloud fluency across AWS core services, architecture principles, security, and pricing. Covers practical understanding of cloud deployment models and global infrastructure concepts.</p>
+          <a href="https://www.credly.com/badges/7fffedd4-72f5-4c18-90b1-7a44b89d17f9" target="_blank" class="project-link">Verify on Credly</a>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-badge-img">
+          <img src="https://api.badgr.io/public/assertions/ajUocfCVTheiC0OoohSy7Q/image" alt="UW Foster Excel Credential Badge" />
+        </div>
+        <div class="cert-info">
+          <div class="cert-title">Excel for Business Credential</div>
+          <div class="cert-issuer">University of Washington, Foster School of Business</div>
+          <div class="cert-date">Issued Jun 2025</div>
+          <p class="cert-desc">Demonstrates advanced Excel proficiency in business analytics contexts, spanning formulas, pivot tables, data modeling, and macro-driven automation for professional analytical workflows.</p>
+          <a href="https://api.badgr.io/public/assertions/ajUocfCVTheiC0OoohSy7Q" target="_blank" class="project-link">Verify on Badgr</a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -618,8 +696,8 @@ footer{
   <div class="contact-links">
     <a href="mailto:moqeet.ahmed3232@gmail.com" class="contact-link">✉️ moqeet.ahmed3232@gmail.com</a>
     <a href="tel:+12067766554" class="contact-link">📱 (206) 776-6554</a>
-    <a href="#" class="contact-link">🔗 LinkedIn</a>
-    <a href="#" class="contact-link">💻 GitHub</a>
+    <a href="https://www.linkedin.com/in/moqeet-ahmed/" target="_blank" class="contact-link">🔗 LinkedIn</a>
+    <a href="https://github.com/moq32" target="_blank" class="contact-link">💻 GitHub</a>
   </div>
 </section>
 
