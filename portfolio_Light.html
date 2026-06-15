@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Moqeet Ahmed — Business Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f7f5f2; --text: #1a1a18; --muted: #7a7a72;
+  --accent: #c8722a; --accent-light: rgba(200,114,42,0.08);
+  --line: #e2deda; --card: #ffffff;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text);
+  font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  cursor: none; overflow-x: hidden;
+}
+#cursor { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; mix-blend-mode: multiply; }
+#cursor-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+  position: absolute; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s;
+}
+#cursor-ring {
+  width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--accent); opacity: 0.5;
+  position: absolute; transform: translate(-50%,-50%);
+  transition: width 0.35s cubic-bezier(.25,.46,.45,.94), height 0.35s cubic-bezier(.25,.46,.45,.94), opacity 0.2s;
+}
+body.cursor-hover #cursor-dot { width: 12px; height: 12px; }
+body.cursor-hover #cursor-ring { width: 56px; height: 56px; opacity: 0.25; }
+#progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 200; width: 0%; }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.25rem 4rem; background: rgba(247,245,242,0.88);
+  backdrop-filter: blur(16px); border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+nav.scrolled { border-color: var(--line); box-shadow: 0 2px 24px rgba(0,0,0,0.04); }
+.nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; letter-spacing: 0.02em; }
+.nav-links { display: flex; gap: 2.5rem; }
+.nav-links a {
+  text-decoration: none; color: var(--muted); font-size: 0.85rem;
+  font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+  position: relative; padding-bottom: 2px; transition: color 0.2s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: right;
+  transition: transform 0.3s ease;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* Hero */
+header {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 8rem 4rem 6rem; position: relative; overflow: hidden; gap: 4rem;
+}
+.hero-bg-text {
+  position: absolute; right: -1rem; top: 50%; transform: translateY(-50%);
+  font-family: 'Playfair Display', serif; font-size: clamp(8rem, 18vw, 18rem);
+  font-weight: 500; line-height: 1; color: transparent;
+  -webkit-text-stroke: 1px rgba(200,114,42,0.07);
+  pointer-events: none; user-select: none; white-space: nowrap;
+  animation: floatText 10s ease-in-out infinite;
+}
+@keyframes floatText { 0%,100% { transform: translateY(-50%); } 50% { transform: translateY(-52%); } }
+.hero-inner { max-width: 560px; position: relative; z-index: 1; flex: 1; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-size: 0.75rem; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--accent); border: 1px solid var(--accent);
+  padding: 0.3rem 0.75rem; border-radius: 2px; margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards;
+}
+.hero-tag::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+h1 {
+  font-family: 'Playfair Display', serif; font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 1.05; font-weight: 400; letter-spacing: -0.02em;
+  opacity: 0; animation: fadeUp 0.7s 0.25s ease forwards;
+}
+h1 em { font-style: italic; color: var(--accent); }
+.hero-sub {
+  margin-top: 1.5rem; font-size: 1.05rem; color: var(--muted);
+  max-width: 520px; font-weight: 300; line-height: 1.75;
+  opacity: 0; animation: fadeUp 0.7s 0.4s ease forwards;
+}
+.hero-cta {
+  margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.7s 0.55s ease forwards;
+}
+
+/* Hero Photo — ROUNDED */
+.hero-photo {
+  position: relative; z-index: 1; flex-shrink: 0;
+  opacity: 0; animation: fadeUp 0.8s 0.3s ease forwards;
+}
+.hero-photo-frame {
+  width: 300px; height: 300px; position: relative;
+}
+.hero-photo-frame::before {
+  content: '';
+  position: absolute; inset: -10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent); opacity: 0.3; z-index: 0;
+  transition: opacity 0.4s, transform 0.4s;
+}
+.hero-photo-frame::after {
+  content: '';
+  position: absolute; inset: -20px;
+  border-radius: 50%;
+  border: 1px dashed var(--accent); opacity: 0.12; z-index: 0;
+  animation: spinSlow 20s linear infinite;
+}
+@keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.hero-photo-frame:hover::before { opacity: 0.6; transform: scale(1.04); }
+.hero-photo-frame img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  border-radius: 50%; position: relative; z-index: 1;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 0 0 4px var(--bg), 0 0 0 6px rgba(200,114,42,0.25);
+  transition: box-shadow 0.4s, transform 0.4s;
+}
+.hero-photo-frame:hover img {
+  transform: scale(1.02);
+  box-shadow: 0 28px 72px rgba(0,0,0,0.22), 0 0 0 4px var(--bg), 0 0 0 7px rgba(200,114,42,0.45);
+}
+
+.hero-ticker {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  border-top: 1px solid var(--line); padding: 0.65rem 0;
+  overflow: hidden; opacity: 0; animation: fadeIn 1s 1s ease forwards;
+}
+.hero-ticker-inner {
+  display: flex; gap: 3rem; white-space: nowrap; animation: ticker 28s linear infinite;
+}
+.hero-ticker-inner span {
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.hero-ticker-inner .sep { color: var(--accent); }
+@keyframes ticker { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+.btn {
+  display: inline-block; text-decoration: none; padding: 0.75rem 1.75rem;
+  border-radius: 3px; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.04em;
+  transition: all 0.25s; position: relative; overflow: hidden;
+}
+.btn::before {
+  content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.12);
+  transform: translateX(-100%) skewX(-10deg); transition: transform 0.4s ease;
+}
+.btn:hover::before { transform: translateX(110%) skewX(-10deg); }
+.btn-primary { background: var(--text); color: var(--bg); }
+.btn-primary:hover { background: var(--accent); }
+.btn-outline { border: 1px solid var(--line); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.1s; } .reveal-d2 { transition-delay: 0.2s; } .reveal-d3 { transition-delay: 0.3s; }
+
+section { padding: 6rem 4rem; }
+.section-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+h2 {
+  font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 400; letter-spacing: -0.01em; margin-bottom: 3rem;
+  padding-bottom: 1.5rem; border-bottom: 1px solid var(--line);
+}
+
+/* About */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.about-text p { color: var(--muted); line-height: 1.85; font-weight: 300; font-size: 1.02rem; }
+.about-text p + p { margin-top: 1rem; }
+.about-photo-inline { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; }
+.about-avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  border: 2px solid var(--accent); flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px rgba(200,114,42,0.2);
+}
+.about-avatar-label { font-family: 'Playfair Display', serif; font-size: 1rem; }
+.about-avatar-label small { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; color: var(--muted); font-weight: 300; }
+.about-stats { display: flex; flex-direction: column; gap: 1.5rem; }
+.stat-item { border-left: 2px solid var(--accent); padding-left: 1.25rem; transition: transform 0.25s; cursor: default; }
+.stat-item:hover { transform: translateX(6px); }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--text); line-height: 1; }
+.stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; font-weight: 300; }
+
+/* Experience */
+.exp-logo { display: block; width: 80px; height: 28px; margin-bottom: 0.6rem; }
+.exp-list { display: flex; flex-direction: column; }
+.exp-item {
+  display: grid; grid-template-columns: 200px 1fr; gap: 2rem;
+  padding: 2rem 0.75rem; border-bottom: 1px solid var(--line); margin: 0 -0.75rem;
+  transition: background 0.3s, border-radius 0.3s;
+}
+.exp-item:hover { background: var(--accent-light); border-radius: 6px; }
+.exp-date { font-size: 0.78rem; color: var(--muted); font-weight: 300; letter-spacing: 0.04em; }
+.exp-company { font-weight: 500; margin-top: 0.35rem; font-size: 0.95rem; }
+.exp-location { font-size: 0.78rem; color: var(--muted); font-weight: 300; margin-top: 0.15rem; }
+.exp-role { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 0.75rem; }
+.exp-bullets { list-style: none; }
+.exp-bullets li {
+  font-size: 0.9rem; color: var(--muted); font-weight: 300; line-height: 1.7;
+  padding-left: 1rem; position: relative; margin-bottom: 0.4rem;
+}
+.exp-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 0.7rem; top: 0.1em; }
+
+/* Projects */
+.carousel-wrapper { position: relative; }
+.projects-grid {
+  display: flex; gap: 1.5rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 0.5rem; scroll-behavior: smooth;
+}
+.projects-grid::-webkit-scrollbar { display: none; }
+.project-card {
+  background: var(--card); border: 1px solid var(--line); padding: 2rem; border-radius: 6px;
+  min-width: 420px; max-width: 420px; scroll-snap-align: start; flex-shrink: 0;
+  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s; position: relative; overflow: hidden;
+}
+.project-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), #e8955a);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease;
+}
+.project-card:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.09); transform: translateY(-5px); border-color: rgba(200,114,42,0.3); }
+.project-card:hover::before { transform: scaleX(1); }
+.carousel-controls { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; }
+.carousel-btn {
+  width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--card); color: var(--text); font-size: 1rem; cursor: none;
+  display: flex; align-items: center; justify-content: center; transition: all 0.25s;
+}
+.carousel-btn:hover { background: var(--accent); color: white; border-color: var(--accent); transform: scale(1.05); }
+.project-tag { display: inline-block; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; font-weight: 500; }
+.project-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; margin-bottom: 0.75rem; line-height: 1.35; }
+.project-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.75; font-weight: 300; }
+.project-bullets { list-style: none; margin-top: 0.75rem; }
+.project-bullets li {
+  font-size: 0.88rem; color: var(--muted); font-weight: 300; line-height: 1.7;
+  padding-left: 1rem; position: relative; margin-bottom: 0.35rem;
+}
+.project-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 0.7rem; top: 0.1em; }
+.project-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
+.tech-tag {
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+  background: var(--bg); color: var(--text); padding: 0.25rem 0.6rem; border-radius: 2px;
+  transition: background 0.2s, color 0.2s;
+}
+.project-card:hover .tech-tag { background: var(--accent-light); color: var(--accent); }
+.project-link {
+  display: inline-block; margin-top: 1.25rem; font-size: 0.8rem; font-weight: 500;
+  color: var(--accent); text-decoration: none; letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--accent); padding-bottom: 1px; transition: opacity 0.2s;
+}
+.project-link:hover { opacity: 0.65; }
+.project-links { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.25rem; }
+
+/* Skills */
+.skills-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+.skill-group h3 { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+.skill-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.skill-item { display: flex; align-items: center; gap: 0.75rem; }
+.skill-name { font-size: 0.88rem; font-weight: 400; min-width: 90px; }
+.skill-bar { flex: 1; height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.skill-fill {
+  height: 100%; background: linear-gradient(90deg, var(--accent), #e8955a);
+  border-radius: 2px; width: 0; transition: width 1.4s cubic-bezier(.4,0,.2,1);
+}
+
+/* Contact */
+.contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.contact-text p { font-size: 1.02rem; color: var(--muted); font-weight: 300; line-height: 1.85; }
+.contact-links { display: flex; flex-direction: column; gap: 1rem; }
+.contact-link {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem;
+  border: 1px solid var(--line); border-radius: 4px; text-decoration: none;
+  color: var(--text); background: var(--card);
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.contact-link:hover { border-color: var(--accent); transform: translateX(8px); box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+.contact-link-icon { font-size: 1rem; color: var(--accent); width: 20px; text-align: center; flex-shrink: 0; }
+.contact-link-text { display: flex; flex-direction: column; }
+.contact-link-text strong { font-size: 0.85rem; font-weight: 500; }
+.contact-link-text span { font-size: 0.8rem; color: var(--muted); font-weight: 300; }
+
+footer {
+  padding: 2rem 4rem; border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.78rem; color: var(--muted);
+}
+
+@media (max-width: 900px) { .hero-photo-frame { width: 240px; height: 240px; } }
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; } .nav-links { display: none; }
+  header { padding: 6rem 1.5rem 4rem; flex-direction: column; gap: 2rem; align-items: flex-start; }
+  .hero-photo { order: -1; } .hero-photo-frame { width: 160px; height: 160px; }
+  section { padding: 4rem 1.5rem; }
+  .about-grid, .contact-inner, .skills-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .exp-item { grid-template-columns: 1fr; } .project-card { min-width: 300px; }
+  .hero-bg-text { display: none; } footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+  body { cursor: auto; } #cursor { display: none; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<div id="cursor"><div id="cursor-dot"></div><div id="cursor-ring"></div></div>
+
+<nav id="navbar">
+  <div class="nav-logo">MA</div>
+  <div class="nav-links">
+    <a href="#about">About</a><a href="#experience">Experience</a>
+    <a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<header>
+  <div class="hero-bg-text">DATA</div>
+  <div class="hero-inner">
+    <div class="hero-tag">MSBA Graduate · Foster School of Business, UW (Top 10%)</div>
+    <h1>Moqeet<br><em>Ahmed.</em></h1>
+    <p class="hero-sub">Business analyst turning complex data into strategic decisions — from cross-price elasticity models to ML pipelines that move the needle.</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Get in Touch</a>
+      <a href="#projects" class="btn btn-outline">View Work</a>
+    </div>
+  </div>
+  <div class="hero-photo">
+    <div class="hero-photo-frame">
+      <img src="Display_Moqeet.JPG" alt="Moqeet Ahmed" />
+    </div>
+  </div>
+  <div class="hero-ticker">
+    <div class="hero-ticker-inner">
+      <span>SQL</span><span class="sep">·</span><span>Python</span><span class="sep">·</span>
+      <span>Tableau</span><span class="sep">·</span><span>Power BI</span><span class="sep">·</span>
+      <span>R</span><span class="sep">·</span><span>Data Analytics</span><span class="sep">·</span>
+      <span>Business Intelligence</span><span class="sep">·</span><span>Machine Learning</span><span class="sep">·</span>
+      <span>XGBoost</span><span class="sep">·</span><span>SARIMAX</span><span class="sep">·</span>
+      <span>Forecasting</span><span class="sep">·</span><span>AWS Cloud</span><span class="sep">·</span>
+      <span>SQL</span><span class="sep">·</span><span>Python</span><span class="sep">·</span>
+      <span>Tableau</span><span class="sep">·</span><span>Power BI</span><span class="sep">·</span>
+      <span>R</span><span class="sep">·</span><span>Data Analytics</span><span class="sep">·</span>
+      <span>Business Intelligence</span><span class="sep">·</span><span>Machine Learning</span><span class="sep">·</span>
+      <span>XGBoost</span><span class="sep">·</span><span>SARIMAX</span><span class="sep">·</span>
+      <span>Forecasting</span><span class="sep">·</span><span>AWS Cloud</span><span class="sep">·</span>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="section-label reveal">About</div>
+  <h2 class="reveal">Who I Am</h2>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="about-photo-inline">
+        <img class="about-avatar" src="Display_Moqeet.JPG" alt="Moqeet Ahmed" />
+        <div class="about-avatar-label">Moqeet Ahmed<small>Seattle, WA · MSBA Graduate, Foster School of Business</small></div>
+      </div>
+      <p>I recently graduated from the University of Washington Foster School of Business with an M.S. in Business Analytics (Top 10% of cohort, June 2026). With a background spanning FMCG sales analysis, marketing, and trade strategy across global brands, I bring a field-tested perspective to data problems.</p>
+      <p>I've worked at Microsoft, Coca-Cola İçecek, Nestlé, and British American Tobacco — building data models, running A/B experiments, and translating complex analysis into commercial decisions that move revenue and inform strategy.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-item reveal reveal-d1">
+        <div class="stat-num">60%</div>
+        <div class="stat-label">Sales increase at Coca-Cola İçecek via cross-price elasticity analysis and SQL-based route optimization</div>
+      </div>
+      <div class="stat-item reveal reveal-d2">
+        <div class="stat-num">$16.6M</div>
+        <div class="stat-label">At-risk revenue recovered in Hotel Bookings project using XGBoost & Random Forest classifiers</div>
+      </div>
+      <div class="stat-item reveal reveal-d3">
+        <div class="stat-num">18</div>
+        <div class="stat-label">High-ROI startups shortlisted at Nestlé from 30+ prospects using a custom scoring model</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-label reveal">Experience</div>
+  <h2 class="reveal">Where I've Worked</h2>
+  <div class="exp-list">
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
+          <rect x="1" y="1" width="12" height="12" fill="#F25022"/>
+          <rect x="14" y="1" width="12" height="12" fill="#7FBA00"/>
+          <rect x="1" y="15" width="12" height="12" fill="#00A4EF"/>
+          <rect x="14" y="15" width="12" height="12" fill="#FFB900"/>
+          <text x="30" y="21" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#1a1a18" text-anchor="start">Microsoft</text>
+        </svg>
+        <div class="exp-date">Mar 2026 – Jun 2026</div>
+        <div class="exp-company">Microsoft</div>
+        <div class="exp-location">Seattle, Washington</div>
+      </div>
+      <div>
+        <div class="exp-role">Business Analytics Practicum Consultant</div>
+        <ul class="exp-bullets">
+          <li>Built an ecosystem-level Customer Lifetime Value framework for four product lines (M365, Windows, Bing, Gaming) by analyzing 4.2M observations with Python (NumPy, XGBoost) and SQL, uncovering cross-product interaction effects that improved LTV forecasting accuracy and guided product-mix decisions.</li>
+          <li>Quantified cross-product LTV premium across 12 product combinations and delivered actionable recommendations to senior stakeholders by creating an adjustment layer in SQL and Python, calibrated on realized revenue and gross margin, which informed budgeting priorities.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
+          <rect width="90" height="30" rx="4" fill="#F40009"/>
+          <text x="45" y="21" font-family="Georgia,'Times New Roman',serif" font-size="14" font-style="italic" font-weight="bold" fill="white" text-anchor="middle">Coca-Cola</text>
+        </svg>
+        <div class="exp-date">Jun 2024 – Jun 2025</div>
+        <div class="exp-company">Coca-Cola İçecek</div>
+        <div class="exp-location">Lahore, Pakistan</div>
+      </div>
+      <div>
+        <div class="exp-role">Sales Analyst</div>
+        <ul class="exp-bullets">
+          <li>Drove a 60% increase in 750ml Coca-Cola sales by building a brand-level clout-vulnerability matrix using cross-price elasticity analysis in Python and SQL to optimize pre-seller route design.</li>
+          <li>Improved predictive annual planning accuracy by developing and deploying demand forecasting models in Advanced Excel, R, and SQL with growth-rate assignments applied across structured datasets.</li>
+          <li>Achieved 86.3% Top 10 SKU Penetration and a 97% cooler efficiency score — a 25% improvement — by analyzing and re-establishing pre-seller routes.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
+          <text x="45" y="22" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="bold" fill="#003399" text-anchor="middle">Nestlé</text>
+        </svg>
+        <div class="exp-date">May 2023 – Oct 2023</div>
+        <div class="exp-company">Nestlé</div>
+        <div class="exp-location">Lahore, Pakistan</div>
+      </div>
+      <div>
+        <div class="exp-role">Business Development Analyst Intern</div>
+        <ul class="exp-bullets">
+          <li>Shortlisted 18 high-ROI candidates from 30+ startup prospects by building a scoring model evaluating financial stability, customer reach, and valuation across Agri-tech, health &amp; wellness, e-commerce, and sustainable packaging verticals.</li>
+          <li>Strengthened strategic partnership decisions by synthesizing unstructured qualitative data and quantitative metrics into a reproducible evaluation framework for senior leadership.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
+          <rect width="90" height="30" rx="4" fill="#003A70"/>
+          <text x="45" y="13" font-family="Arial,Helvetica,sans-serif" font-size="8" font-weight="bold" fill="white" text-anchor="middle" letter-spacing="0.5">BRITISH AMERICAN</text>
+          <text x="45" y="24" font-family="Arial,Helvetica,sans-serif" font-size="8" font-weight="bold" fill="white" text-anchor="middle" letter-spacing="0.5">TOBACCO</text>
+        </svg>
+        <div class="exp-date">May 2022 – Oct 2022</div>
+        <div class="exp-company">British American Tobacco</div>
+        <div class="exp-location">Rawalpindi, Pakistan</div>
+      </div>
+      <div>
+        <div class="exp-role">Marketing Analyst Intern</div>
+        <ul class="exp-bullets">
+          <li>Delivered a 9% lift in weekly outlet sales by designing an Excel-based outlet scoring model incorporating POS condition, dispenser maintenance, and product visibility metrics; validated via A/B test against the prior volume-only targeting rule.</li>
+          <li>Prevented 10% monthly volume losses by surveying 120 retail outlets to identify counterfeit overstocking patterns and implementing data-driven early intervention strategies.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-label reveal">Projects</div>
+  <h2 class="reveal">Selected Work</h2>
+  <div class="carousel-wrapper reveal">
+    <div class="projects-grid" id="projectsCarousel">
+
+      <div class="project-card">
+        <div class="project-tag">Agentic Automation · Apr 2026 – May 2026</div>
+        <div class="project-title">FMCG Sales Promotion Bot</div>
+        <ul class="project-bullets">
+          <li>Reduced 85% of processing time of a 6-hour manual promotion review by developing an automated agentic UiPath pipeline spanning data ingestion, analysis, GenAI reasoning, and reporting.</li>
+          <li>Recaptured the 15–20% uplift typically lost to ad hoc decision-making by quantifying promo performance across category, channel, and country and integrating the Anthropic Claude API to write recommendations into a Google Sheets dashboard.</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-tag">UiPath</span><span class="tech-tag">Claude API</span>
+          <span class="tech-tag">JavaScript</span><span class="tech-tag">Google Sheets</span>
+        </div>
+      </div>
+
+      <!-- Hotel Bookings — OPTIMIZED content from resume -->
+      <div class="project-card">
+        <div class="project-tag">Machine Learning · Jan 2026 – Mar 2026</div>
+        <div class="project-title">Hotel Bookings Optimization: Cancellation Risk &amp; Demand Forecasting</div>
+        <ul class="project-bullets">
+          <li>Built Random Forest and XGBoost classifiers with cross-validation to flag high-cancellation-risk bookings, recovering $16.6M (39%) in at-risk revenue.</li>
+          <li>Engineered a full ML pipeline — preprocessing, feature engineering, hyperparameter tuning — evaluated on precision, recall, and AUC.</li>
+          <li>Forecasted 6-month seasonal booking volumes via SARIMAX, enabling overbooking buffers and demand-aligned staffing strategies.</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-tag">Python</span><span class="tech-tag">XGBoost</span>
+          <span class="tech-tag">Random Forest</span><span class="tech-tag">SARIMAX</span>
+          <span class="tech-tag">scikit-learn</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/moq32/Hotel-Bookings-Cancellations" target="_blank">View on GitHub →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Data Analysis · Jun 2025 – Sep 2025</div>
+        <div class="project-title">Adidas US Retail Sales (2020–2021): Regional, Retailer &amp; Product Performance Analysis</div>
+        <ul class="project-bullets">
+          <li>Uncovered revenue and profitability trends across 4 dimensions (region, channel, retailer, product type) using 30+ SQL queries across structured datasets.</li>
+          <li>Surfaced Covid-era recovery patterns and channel-level pricing trade-offs by comparing FY2020 vs. FY2021 performance with Python and pandas.</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-tag">SQL</span><span class="tech-tag">Python</span>
+          <span class="tech-tag">pandas</span><span class="tech-tag">Data Viz</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/moq32/Analysis_AdidasUSSales20_21" target="_blank">View on GitHub →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">UI/UX · Jan 2024 – May 2024</div>
+        <div class="project-title">Mapping Community Knowledge Digitally: Navigation Research &amp; Design</div>
+        <ul class="project-bullets">
+          <li>Identified gaps in digital navigation platforms through semi-structured interviews and thematic analysis of community knowledge.</li>
+          <li>Translated research insights into a high-fidelity Figma prototype for a community-driven navigation companion; final report written in LaTeX.</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-tag">Figma</span><span class="tech-tag">Thematic Analysis</span>
+          <span class="tech-tag">LaTeX</span><span class="tech-tag">UX Research</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://www.figma.com/proto/tkIJlQlXhSZIDg4CCIYQa9/Prototype_Group3?node-id=4018-1418&starting-point-node-id=4018%3A1418&t=ZTq5OXRDT9uEK7Zf-1" target="_blank">View Figma →</a>
+          <a class="project-link" href="https://github.com/moq32/Mapping-Community-Knowledge-Digitally" target="_blank">View on GitHub →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Data Analysis · Sep 2023 – Jan 2024</div>
+        <div class="project-title">Dairy Retail Data Analysis – Product, Pricing, and Visibility</div>
+        <ul class="project-bullets">
+          <li>Analyzed the supplier-side retail dairy landscape in urban Lahore to understand pricing drivers and shelf visibility across LMT vs. IMT store formats.</li>
+          <li>Collected primary dataset through retail audits capturing brand presence, pricing, SKU attributes, promotions, and shelf visibility.</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-tag">R</span><span class="tech-tag">Statistical Analysis</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/moq32/Dairy-Retail-Data-Analysis" target="_blank">View on GitHub →</a>
+        </div>
+      </div>
+
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" onclick="document.getElementById('projectsCarousel').scrollBy({left:-450,behavior:'smooth'})">&#8592;</button>
+      <button class="carousel-btn" onclick="document.getElementById('projectsCarousel').scrollBy({left:450,behavior:'smooth'})">&#8594;</button>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-label reveal">Skills</div>
+  <h2 class="reveal">Technical Toolkit</h2>
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <h3>Languages &amp; ML</h3>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">Python</span><div class="skill-bar"><div class="skill-fill" data-w="88%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">SQL</span><div class="skill-bar"><div class="skill-fill" data-w="92%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">R</span><div class="skill-bar"><div class="skill-fill" data-w="80%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">C++</span><div class="skill-bar"><div class="skill-fill" data-w="55%"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-group reveal reveal-d1">
+      <h3>Analytics &amp; Visualization</h3>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">Excel</span><div class="skill-bar"><div class="skill-fill" data-w="95%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Tableau</span><div class="skill-bar"><div class="skill-fill" data-w="78%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Power BI</span><div class="skill-bar"><div class="skill-fill" data-w="75%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">pandas / NumPy</span><div class="skill-bar"><div class="skill-fill" data-w="85%"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-group reveal reveal-d2">
+      <h3>ML &amp; Tools</h3>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">scikit-learn</span><div class="skill-bar"><div class="skill-fill" data-w="82%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">XGBoost</span><div class="skill-bar"><div class="skill-fill" data-w="78%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">SARIMAX</span><div class="skill-bar"><div class="skill-fill" data-w="75%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">AWS / Git</span><div class="skill-bar"><div class="skill-fill" data-w="65%"></div></div></div>
+        <div class="skill-item"><span class="skill-name">UiPath</span><div class="skill-bar"><div class="skill-fill" data-w="70%"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-label reveal">Contact</div>
+  <h2 class="reveal">Let's Connect</h2>
+  <div class="contact-inner">
+    <div class="contact-text reveal">
+      <p>Recent MSBA graduate from UW Foster School of Business (Top 10%, June 2026). Open to full-time opportunities in data analytics, business intelligence, and strategy. Based in Seattle, WA.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:moqeet.ahmed3232@gmail.com" class="contact-link reveal reveal-d1">
+        <span class="contact-link-icon">✉</span>
+        <div class="contact-link-text"><strong>Email</strong><span>moqeet.ahmed3232@gmail.com</span></div>
+      </a>
+      <a href="https://www.linkedin.com/in/moqeet-ahmed/" target="_blank" class="contact-link reveal reveal-d2">
+        <span class="contact-link-icon">in</span>
+        <div class="contact-link-text"><strong>LinkedIn</strong><span>linkedin.com/in/moqeet-ahmed</span></div>
+      </a>
+      <a href="https://github.com/moq32" target="_blank" class="contact-link reveal reveal-d3">
+        <span class="contact-link-icon">&#9670;</span>
+        <div class="contact-link-text"><strong>GitHub</strong><span>github.com/moq32</span></div>
+      </a>
+      <a href="tel:+12067766554" class="contact-link reveal">
+        <span class="contact-link-icon">&#9990;</span>
+        <div class="contact-link-text"><strong>Phone</strong><span>+1 (206) 776-6554</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Moqeet Ahmed</span>
+  <span>Seattle, WA · MSBA Graduate, Foster School of Business</span>
+</footer>
+
+<script>
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+});
+(function loop() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a, button, .stat-item').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  bar.style.width = pct + '%';
+});
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.skill-fill[data-w]').forEach(b => { b.style.width = b.dataset.w; });
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
