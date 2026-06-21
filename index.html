@@ -156,7 +156,18 @@ section{padding:100px 48px}
 .metric-item .desc{font-size:.82rem;color:var(--text-dim);margin-top:6px;font-weight:400}
 
 /* ─── EXPERIENCE CARDS ─── */
-.exp-logo { display: block; width: 80px; height: 28px; margin-bottom: 14px; }
+.exp-logo {
+  display: block;
+  height: 48px;
+  width: 160px;
+  margin-bottom: 18px;
+  object-fit: contain;
+  object-position: left center;
+  background: rgba(255,255,255,0.95);
+  padding: 7px 12px;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
 .exp-card{
   background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
   padding:40px 44px;margin-bottom:24px;position:relative;overflow:hidden;
@@ -418,12 +429,12 @@ footer{
 
     <!-- Microsoft -->
     <div class="exp-card">
-      <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
+      <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30" preserveAspectRatio="xMinYMid meet">
         <rect x="1" y="1" width="12" height="12" fill="#F25022"/>
         <rect x="14" y="1" width="12" height="12" fill="#7FBA00"/>
         <rect x="1" y="15" width="12" height="12" fill="#00A4EF"/>
         <rect x="14" y="15" width="12" height="12" fill="#FFB900"/>
-        <text x="30" y="21" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#EDEAE4" text-anchor="start">Microsoft</text>
+        <text x="30" y="21" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#1a1a1a" text-anchor="start">Microsoft</text>
       </svg>
       <div class="exp-header">
         <div class="exp-company">Microsoft <span>| Fortune 500 Technology Company</span></div>
@@ -441,10 +452,7 @@ footer{
 
     <!-- Coca-Cola -->
     <div class="exp-card">
-      <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
-        <rect width="90" height="30" rx="4" fill="#F40009"/>
-        <text x="45" y="21" font-family="Georgia,'Times New Roman',serif" font-size="14" font-style="italic" font-weight="bold" fill="white" text-anchor="middle">Coca-Cola</text>
-      </svg>
+      <img class="exp-logo" src="Logos/Coca-Cola_logo.svg" alt="Coca-Cola" />
       <div class="exp-header">
         <div class="exp-company">Coca-Cola İçecek (CCI) <span>| Fortune 500 Bottling Partner</span></div>
         <div class="exp-meta">
@@ -461,9 +469,7 @@ footer{
 
     <!-- Nestlé -->
     <div class="exp-card">
-      <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
-        <text x="45" y="22" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="bold" fill="#003399" text-anchor="middle">Nestlé</text>
-      </svg>
+      <img class="exp-logo" src="Logos/Nestle_logo.png" alt="Nestlé" />
       <div class="exp-header">
         <div class="exp-company">Nestlé <span>| Global FMCG Leader</span></div>
         <div class="exp-meta">
@@ -480,11 +486,7 @@ footer{
 
     <!-- BAT -->
     <div class="exp-card">
-      <svg class="exp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 30">
-        <rect width="90" height="30" rx="4" fill="#003A70"/>
-        <text x="45" y="13" font-family="Arial,Helvetica,sans-serif" font-size="8" font-weight="bold" fill="white" text-anchor="middle" letter-spacing="0.5">BRITISH AMERICAN</text>
-        <text x="45" y="24" font-family="Arial,Helvetica,sans-serif" font-size="8" font-weight="bold" fill="white" text-anchor="middle" letter-spacing="0.5">TOBACCO</text>
-      </svg>
+      <img class="exp-logo" src="Logos/BAT_logo.png" alt="British American Tobacco" />
       <div class="exp-header">
         <div class="exp-company">British American Tobacco <span>| Multinational FMCG</span></div>
         <div class="exp-meta">
@@ -655,19 +657,19 @@ footer{
     <div class="section-header"><h2>Education</h2></div>
     <div class="edu-grid">
       <div class="edu-card">
-        <img src="uw-logo.png" alt="University of Washington" class="edu-logo" />
+        <img src="Logos/uw-logo.png" alt="University of Washington" class="edu-logo" />
         <div class="degree">M.S. in Business Analytics <span style="font-size:.78rem;color:var(--gold);font-weight:500;">(Top 10% of Cohort)</span></div>
         <div class="school">University of Washington, Foster School of Business</div>
         <div class="edu-meta">📍 Seattle, WA · Jun 2025 – Jun 2026 · Graduated</div>
-        <div class="coursework" style="margin-bottom:8px">cGPA: <strong>3.79</strong> <span style="color:var(--gold);font-weight:500">(Top 10% of Cohort)</span></div>
+        <div class="coursework" style="margin-bottom:8px">cGPA: 3.79 <span style="color:var(--gold);font-weight:500">(Top 10% of Cohort)</span></div>
         <div class="coursework"><strong>Coursework:</strong> Machine Learning, Database Management, Operations Research</div>
       </div>
       <div class="edu-card">
-        <img src="lums-logo.png" alt="Lahore University of Management Sciences" class="edu-logo" />
+        <img src="Logos/lums-logo.png" alt="Lahore University of Management Sciences" class="edu-logo" />
         <div class="degree">BSc (Hons) Management Sciences</div>
         <div class="school">Lahore University of Management Sciences (LUMS)</div>
-        <div class="edu-meta">📍 Lahore, Pakistan · Sep 2020 – Jun 2024</div>
-        <div class="coursework" style="margin-bottom:8px">cGPA: <strong>3.2</strong></div>
+        <div class="edu-meta">📍 Lahore, Pakistan · Sep 2020 – Jun 2024 · Graduated</div>
+        <div class="coursework" style="margin-bottom:8px">cGPA: 3.2</div>
         <div class="coursework" style="margin-bottom:8px"><strong>Minor:</strong> Computer Science</div>
         <div class="coursework"><strong>Coursework:</strong> Data Structures, Probability and Statistics, Linear Programming, Object-Oriented Programming, Consumer Behaviour</div>
       </div>
@@ -683,7 +685,7 @@ footer{
 
       <div class="cert-card">
         <div class="cert-badge-img">
-          <img src="aws-certified-cloud-practitioner.png" alt="AWS Certified Cloud Practitioner Badge" />
+          <img src="Logos/aws-certified-cloud-practitioner.png" alt="AWS Certified Cloud Practitioner Badge" />
         </div>
         <div class="cert-info">
           <div class="cert-title">AWS Certified Cloud Practitioner</div>
